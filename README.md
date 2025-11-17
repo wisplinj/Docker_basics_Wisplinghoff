@@ -60,3 +60,91 @@ docker compose pull
 Das ist definitiv Geschmachssache und hängt von der Umgebung ab. Wenn man mehr als ein Projekt (zum Beispiel einen Blog und ein Pihole) auf einem Server betreibt, sollte man für jedes einen Ordner anlegen und darin eine Docker-Compose-Datei ablegen. Die nützlichen Helfer wie Portainer und Watchtower kommen zusammen in eine weitere Datei. Dann kann man mit `docker compose down`gezielt Teile der Umgebung herunterfahren.
 
 
+
+
+
+# Docker Basics – Übersicht der verwendeten Container
+
+In diesem Projekt wurden mehrere Docker-Container eingerichtet und mit Docker Compose gestartet.  
+Im Folgenden werden die einzelnen Dienste kurz erklärt.
+
+---
+
+## 🟩 Pi-hole
+**Beschreibung:**  
+Pi-hole ist ein DNS-Filter, der Werbung und Tracker im gesamten Netzwerk blockiert.  
+Er fungiert als lokaler DNS-Server und filtert unerwünschte Domains heraus.
+
+**Weboberfläche:**  
+http://localhost:8081/admin
+
+**Besonderheiten:**  
+- Gute Übersicht über geblockte Anfragen  
+- Kann als Netzwerkschutz für alle Geräte genutzt werden  
+
+---
+
+## 🟦 Portainer
+**Beschreibung:**  
+Portainer ist eine grafische Benutzeroberfläche, mit der man Docker verwalten kann.  
+Container lassen sich damit starten, stoppen, ansehen und konfigurieren.
+
+**Weboberfläche:**  
+http://localhost:9000
+
+**Besonderheiten:**  
+- Sehr hilfreich, um Docker ohne Terminal zu steuern  
+- Zeigt Logs, Container, Volumes, Netzwerke usw.
+
+---
+
+## 🟨 Watchtower
+**Beschreibung:**  
+Watchtower überwacht laufende Docker-Container und aktualisiert sie automatisch,  
+wenn neue Versionen der Images verfügbar sind.
+
+**Weboberfläche:**  
+Keine – Watchtower läuft im Hintergrund.
+
+**Logs ansehen:**  
+```
+docker logs <watchtower-container-name>
+```
+
+**Besonderheiten:**  
+- Automatische Updates  
+- Weniger manuelle Pflege nötig  
+
+---
+
+## 🟥 Nginx
+**Beschreibung:**  
+Nginx ist ein schneller, schlanker Webserver.  
+In diesem Projekt liefert er eine eigene `index.html` aus dem Ordner `nginx/html` aus.
+
+**Weboberfläche:**  
+http://localhost:8080
+
+**Besonderheiten:**  
+- Perfekt für statische Webseiten  
+- Sehr leichtgewichtig und weit verbreitet
+
+---
+
+# 🧩 Starten der Container
+
+```
+docker compose -f pihole/pihole.yml up -d
+docker compose -f portainer/portainer.yml up -d
+docker compose -f watchtower/watchtower.yml up -d
+docker compose -f nginx/nginx.yml up -d
+```
+
+# 🛑 Stoppen der Container
+
+```
+docker compose -f pihole/pihole.yml down
+docker compose -f portainer/portainer.yml down
+docker compose -f watchtower/watchtower.yml down
+docker compose -f nginx/nginx.yml down
+```
